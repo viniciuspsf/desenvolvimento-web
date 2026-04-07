@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Clone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #141414;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .logo {
+            font-size: 2.5em;
+            color: #e50914;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        nav {
+            display: flex;
+            gap: 30px;
+            flex: 1;
+            margin-left: 50px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #e50914;
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .search-box {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 4px;
+            color: white;
+            border: none;
+        }
+        
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), 
+                        url('https://via.placeholder.com/1920x1080/1a1a1a/ffffff?text=Featured+Movie') center/cover;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 50px;
+            margin-bottom: 30px;
+        }
+        
+        .hero-content h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .hero-content p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-play {
+            background-color: white;
+            color: black;
+        }
+        
+        .btn-play:hover {
+            background-color: rgba(255, 255, 255, 0.75);
+        }
+        
+        .btn-info {
+            background-color: rgba(109, 109, 110, 0.7);
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: rgba(109, 109, 110, 0.4);
+        }
+        
+        .content-section {
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            margin-left: 50px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .movies-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 50px;
+            gap: 10px;
+            scroll-behavior: smooth;
+        }
+        
+        .movies-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .movies-container::-webkit-scrollbar-track {
+            background: #141414;
+        }
+        
+        .movies-container::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+        
+        .movie-card {
+            min-width: 200px;
+            height: 300px;
+            background-color: #2f2f2f;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .movie-card:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+        
+        .movie-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .movie-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 20px 15px;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+        
+        .movie-card:hover .movie-info {
+            transform: translateY(0);
+        }
+        
+        .movie-info h3 {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+        
+        .movie-info p {
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+        
+        footer {
+            background-color: #000;
+            padding: 50px;
+            text-align: center;
+            color: #808080;
+            border-top: 1px solid #333;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">NETFLIX</div>
+        <nav>
+            <a href="#home">Início</a>
+            <a href="#series">Séries</a>
+            <a href="#filmes">Filmes</a>
+            <a href="#bombando">Bombando</a>
+            <a href="#minha-lista">Minha Lista</a>
+        </nav>
+        <div class="header-right">
+            <input type="text" class="search-box" placeholder="Buscar">
+            <span>👤 Perfil</span>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Título do Filme em Destaque</h1>
+            <p>Uma épica aventura de ação e suspense que vai te manter preso do início ao fim. Um filme que não pode ser perdido!</p>
+            <div class="hero-buttons">
+                <button class="btn btn-play">▶ Reproduzir</button>
+                <button class="btn btn-info">ℹ Mais Informações</button>
+            </div>
+        </div>
+    </section>
+    
+    <div class="content-section">
+        <h2 class="section-title">Em Alta Agora</h2>
+        <div class="movies-container">
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/CC0000/ffffff?text=Filme+1" alt="Filme 1">
+                <div class="movie-info">
+                    <h3>Filme Ação 1</h3>
+                    <p>2024 • Ação</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/1a1a1a/ffffff?text=Filme+2" alt="Filme 2">
+                <div class="movie-info">
+                    <h3>Dramaturgia 2</h3>
+                    <p>2024 • Drama</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/2a2a2a/ffffff?text=Filme+3" alt="Filme 3">
+                <div class="movie-info">
+                    <h3>Suspense 3</h3>
+                    <p>2024 • Suspense</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/3a3a3a/ffffff?text=Filme+4" alt="Filme 4">
+                <div class="movie-info">
+                    <h3>Aventura 4</h3>
+                    <p>2024 • Aventura</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/4a4a4a/ffffff?text=Filme+5" alt="Filme 5">
+                <div class="movie-info">
+                    <h3>Comédia 5</h3>
+                    <p>2024 • Comédia</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/5a5a5a/ffffff?text=Filme+6" alt="Filme 6">
+                <div class="movie-info">
+                    <h3>Fantasia 6</h3>
+                    <p>2024 • Fantasia</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content-section">
+        <h2 class="section-title">Séries Populares</h2>
+        <div class="movies-container">
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/111111/ffffff?text=Série+1" alt="Série 1">
+                <div class="movie-info">
+                    <h3>Série 1</h3>
+                    <p>Temporada 3 • Drama</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/222222/ffffff?text=Série+2" alt="Série 2">
+                <div class="movie-info">
+                    <h3>Série 2</h3>
+                    <p>Temporada 2 • Ação</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/333333/ffffff?text=Série+3" alt="Série 3">
+                <div class="movie-info">
+                    <h3>Série 3</h3>
+                    <p>Temporada 1 • Mistério</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/444444/ffffff?text=Série+4" alt="Série 4">
+                <div class="movie-info">
+                    <h3>Série 4</h3>
+                    <p>Temporada 4 • Drama</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/555555/ffffff?text=Série+5" alt="Série 5">
+                <div class="movie-info">
+                    <h3>Série 5</h3>
+                    <p>Temporada 2 • Comédia</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/666666/ffffff?text=Série+6" alt="Série 6">
+                <div class="movie-info">
+                    <h3>Série 6</h3>
+                    <p>Temporada 1 • Thriller</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content-section">
+        <h2 class="section-title">Recomendado para Você</h2>
+        <div class="movies-container">
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/0a0a0a/ffffff?text=Filme+7" alt="Filme 7">
+                <div class="movie-info">
+                    <h3>Filme 7</h3>
+                    <p>2024 • Drama</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/1b1b1b/ffffff?text=Filme+8" alt="Filme 8">
+                <div class="movie-info">
+                    <h3>Filme 8</h3>
+                    <p>2024 • Ação</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/2c2c2c/ffffff?text=Filme+9" alt="Filme 9">
+                <div class="movie-info">
+                    <h3>Filme 9</h3>
+                    <p>2024 • Comédia</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/3d3d3d/ffffff?text=Filme+10" alt="Filme 10">
+                <div class="movie-info">
+                    <h3>Filme 10</h3>
+                    <p>2024 • Mistério</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/4e4e4e/ffffff?text=Filme+11" alt="Filme 11">
+                <div class="movie-info">
+                    <h3>Filme 11</h3>
+                    <p>2024 • Fantasia</p>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="https://via.placeholder.com/200x300/5f5f5f/ffffff?text=Filme+12" alt="Filme 12">
+                <div class="movie-info">
+                    <h3>Filme 12</h3>
+                    <p>2024 • Suspense</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Netflix Clone. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
