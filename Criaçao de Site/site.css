@@ -13,6 +13,7 @@ body {
     background-color: linear-gradient(135deg, #4facce, #002ffe);
 }
 
+/* conteiner */
 .container {
     background: white;
     padding: 2rem;
@@ -24,4 +25,30 @@ body {
 }
 .container:hover {
     transform: scale(1.04);
+}
+
+/* input */
+input {
+    width: 100%;
+    padding: 0.7rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+input:focus {
+    border-color: #4facce;
+    outline: none;
+}
+
+/* botão */
+button {
+    width: 100%;
+    padding: 0.7rem;
+    margin-top: 10px;
+    background: #4facfe;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
