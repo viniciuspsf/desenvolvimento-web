@@ -52,3 +52,26 @@ button {
     border-radius: 6px;
     cursor: pointer;
 }
+
+button:hover {
+    background: #00c6ff;
+}
+
+a {
+    color: #4facce;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#message {
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+#status {
+    margin-bottom: 15px 0;
+    font-weight: bold;
+}
